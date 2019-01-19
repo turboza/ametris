@@ -1,35 +1,25 @@
 # Ametris
 
-A simple Blockchain implementation in Elixir with the purpose of learning
+A simple Blockchain implementation in Elixir for the purpose of learning
 
 ## Usage
 
 ```iex
-iex> blockchain = Blockchain.new
-[
-  %Ametris.Block{
-    data: "Hello Ametris",
-    hash: "80EA2049016390113861B8A599267B732431B42F67A09802B2ABFFDFE668F551",
-    prev_hash: "GENESIS",
-    timestamp: #DateTime<2019-01-19 09:47:08.805888Z>
-  }
-]
+iex> Ametris.Blockchain.start_link(%{})
+iex> {:ok, latest} = Ametris.Blockchain.latest_block
+{:ok,
+ %Ametris.Block{
+   data: "Hello Ametris",
+   hash: "30C1C049C45D2824A9689E0051E45566C42BE7A5766F141894C89E452C3D9567",
+   index: 0,
+   prev_hash: "GENESIS",
+   timestamp: #DateTime<2019-01-19 13:10:24.953931Z>
+ }}
 
-iex> Blockchain.insert(blockchain, "My data")
-[
-  %Ametris.Block{
-    data: "My data",
-    hash: "3A7BF7E7162B267A5F82CCF58FC7F252AE180C224147A6C1579FBED9FF79991E",
-    prev_hash: "011D5C038718374A6828849C6596AF617E9235BDA7F9E2C712D6079A72622EBD",
-    timestamp: #DateTime<2019-01-19 09:57:03.520172Z>
-  },
-  %Ametris.Block{
-    data: "Hello Ametris",
-    hash: "011D5C038718374A6828849C6596AF617E9235BDA7F9E2C712D6079A72622EBD",
-    prev_hash: "GENESIS",
-    timestamp: #DateTime<2019-01-19 09:56:59.517497Z>
-  }
-]
+
+iex> block = Ametris.Block.new("New data", latest)
+iex> Ametris.Blockchain.insert_block(block)
+:ok
 ```
 
 ## Resource
