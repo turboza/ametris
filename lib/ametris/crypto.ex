@@ -13,13 +13,6 @@ defmodule Ametris.Crypto do
     |> sha256
   end
 
-  @doc """
-  Calculate and put the hash in the block
-  """
-  def put_hash(%Block{} = block) do
-    %Block{block | hash: hash(block)}
-  end
-
   defp sha256(string) do
     :crypto.hash(:sha256, string) |> Base.encode16()
   end

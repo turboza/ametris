@@ -1,5 +1,5 @@
 defmodule Ametris.Block do
-  alias Ametris.Block
+  alias Ametris.{Block, Crypto}
 
   defstruct data: "", timestamp: nil, prev_hash: nil, hash: nil
 
@@ -23,5 +23,23 @@ defmodule Ametris.Block do
       prev_hash: "GENESIS",
       timestamp: DateTime.utc_now()
     }
+  end
+
+  @doc """
+  Calculate and put the hash in the block
+  """
+  def with_hash(%Block{} = block) do
+    %Block{block | hash: Crypto.hash(block)}
+  end
+
+  @doc """
+  Check if a block is valid
+  """
+  def valid?(%Block{} = block) do
+    Crypto.hash(block) == block.hash
+  end
+
+  def valid?(%Block{} = block, %Block{} = prev_block) do
+    prev_block.hash == block.prev_hash && valid?(block)
   end
 end
