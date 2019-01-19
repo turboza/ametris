@@ -13,20 +13,32 @@ defmodule Ametris.Blockchain do
     GenServer.start_link(@server, nil, name: __MODULE__)
   end
 
+  @doc """
+  Initialize a new chain with a genesis block
+  """
   def init(_) do
-    {:ok, new()}
+    {:ok, [Block.genesis()]}
   end
 
+  @doc """
+  Get the latest block of chain
+  """
   @spec latest_block() :: {:ok, Block.t()}
   def latest_block do
     GenServer.call(@server, :latest_block)
   end
 
+  @doc """
+  Get the list of all blocks in the chain
+  """
   @spec all_blocks() :: {:ok, list(Block.t())}
   def all_blocks do
     GenServer.call(@server, :all_blocks)
   end
 
+  @doc """
+  Insert the new block which must be valid to make it to the chain
+  """
   @spec insert_block(Block.t()) :: :ok | {:error, atom()}
   def insert_block(%Block{} = block) do
     GenServer.call(@server, {:insert_block, block})
@@ -53,14 +65,6 @@ defmodule Ametris.Blockchain do
   end
 
   # Implementation
-
-  @doc """
-  Initialize a new chain with a genesis block
-  """
-  @spec new() :: [Block.t()]
-  def new do
-    [Block.genesis()]
-  end
 
   @doc """
   Validate the valid chain
