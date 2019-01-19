@@ -1,6 +1,6 @@
 # Ametris
 
-A Simple blockchain built with Elixir
+A simple Blockchain implementation in Elixir with the purpose of learning
 
 ## Usage
 
@@ -34,6 +34,7 @@ iex> Blockchain.insert(blockchain, "My data")
 
 ## Resource
 
-Thank you these useful resources for guiding in development of this project
+Thank you to these great resources for guiding in development of this project
 
 - https://sheharyar.me/blog/writing-blockchain-elixir/
+- https://github.com/robinmonjo/coincoin
