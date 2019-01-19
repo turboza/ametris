@@ -12,23 +12,20 @@ defmodule Ametris.Block do
       prev_hash: prev_hash,
       timestamp: DateTime.utc_now()
     }
+    |> put_hash()
   end
 
   @doc """
   Building an initial block of chain
   """
   def genesis do
-    %Block{
-      data: "Hello Ametris",
-      prev_hash: "GENESIS",
-      timestamp: DateTime.utc_now()
-    }
+    new("Hello Ametris", "GENESIS")
   end
 
   @doc """
   Calculate and put the hash in the block
   """
-  def with_hash(%Block{} = block) do
+  def put_hash(%Block{} = block) do
     %Block{block | hash: Crypto.hash(block)}
   end
 
