@@ -38,3 +38,4 @@ Thank you to these great resources for guiding in development of this project
 
 - https://sheharyar.me/blog/writing-blockchain-elixir/
 - https://github.com/robinmonjo/coincoin
+- https://medium.com/@lhartikk/a-blockchain-in-200-lines-of-code-963cc1cc0e54

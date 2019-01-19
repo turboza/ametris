@@ -14,9 +14,7 @@ defmodule Ametris.Blockchain do
   """
   @spec insert(list(Block.t()), String.t()) :: list(Block.t())
   def insert(blockchain, data) when is_list(blockchain) do
-    %Block{hash: prev_hash} = hd(blockchain)
-
-    [Block.new(data, prev_hash) | blockchain]
+    [Block.new(data, hd(blockchain)) | blockchain]
   end
 
   @doc """

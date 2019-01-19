@@ -1,25 +1,27 @@
 defmodule Ametris.Block do
   alias Ametris.{Block, Crypto}
 
-  defstruct data: "", timestamp: nil, prev_hash: nil, hash: nil
+  defstruct index: nil, data: "", timestamp: nil, prev_hash: nil, hash: nil
 
   @type t :: %__MODULE__{
+          index: integer(),
           data: String.t(),
           timestamp: DateTime.t(),
           prev_hash: String.t(),
           hash: String.t()
         }
 
-  @hash_fields [:data, :timestamp, :prev_hash]
+  @hash_fields [:index, :data, :timestamp, :prev_hash]
 
   @doc """
   Building a new block based on the previous hash data
   """
-  @spec new(String.t(), String.t()) :: Block.t()
-  def new(data, prev_hash) do
+  @spec new(String.t(), Block.t()) :: Block.t()
+  def new(data, prev_block) do
     block = %Block{
+      index: prev_block.index + 1,
       data: data,
-      prev_hash: prev_hash,
+      prev_hash: prev_block.hash,
       timestamp: DateTime.utc_now()
     }
 
@@ -31,7 +33,14 @@ defmodule Ametris.Block do
   """
   @spec genesis() :: Block.t()
   def genesis do
-    new("Hello Ametris", "GENESIS")
+    block = %Block{
+      index: 0,
+      data: "Hello Ametris",
+      prev_hash: "GENESIS",
+      timestamp: DateTime.utc_now()
+    }
+
+    %Block{block | hash: Crypto.hash(block, @hash_fields)}
   end
 
   @doc """
@@ -44,6 +53,6 @@ defmodule Ametris.Block do
 
   @spec valid?(Block.t(), Block.t()) :: boolean()
   def valid?(%Block{} = block, %Block{} = prev_block) do
-    prev_block.hash == block.prev_hash && valid?(block)
+    block.index == prev_block.index + 1 && prev_block.hash == block.prev_hash && valid?(block)
   end
 end
