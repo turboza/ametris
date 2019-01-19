@@ -3,39 +3,46 @@ defmodule Ametris.Block do
 
   defstruct data: "", timestamp: nil, prev_hash: nil, hash: nil
 
+  @type t :: %__MODULE__{
+          data: String.t(),
+          timestamp: DateTime.t(),
+          prev_hash: String.t(),
+          hash: String.t()
+        }
+
+  @hash_fields [:data, :timestamp, :prev_hash]
+
   @doc """
   Building a new block based on the previous hash data
   """
+  @spec new(String.t(), String.t()) :: Block.t()
   def new(data, prev_hash) do
-    %Block{
+    block = %Block{
       data: data,
       prev_hash: prev_hash,
       timestamp: DateTime.utc_now()
     }
-    |> put_hash()
+
+    %Block{block | hash: Crypto.hash(block, @hash_fields)}
   end
 
   @doc """
   Building an initial block of chain
   """
+  @spec genesis() :: Block.t()
   def genesis do
     new("Hello Ametris", "GENESIS")
   end
 
   @doc """
-  Calculate and put the hash in the block
-  """
-  def put_hash(%Block{} = block) do
-    %Block{block | hash: Crypto.hash(block)}
-  end
-
-  @doc """
   Check if a block is valid
   """
+  @spec valid?(Block.t()) :: boolean()
   def valid?(%Block{} = block) do
-    Crypto.hash(block) == block.hash
+    Crypto.hash(block, @hash_fields) == block.hash
   end
 
+  @spec valid?(Block.t(), Block.t()) :: boolean()
   def valid?(%Block{} = block, %Block{} = prev_block) do
     prev_block.hash == block.prev_hash && valid?(block)
   end

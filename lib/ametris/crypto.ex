@@ -1,14 +1,11 @@
 defmodule Ametris.Crypto do
-  alias Ametris.Block
-
-  @hash_fields [:data, :timestamp, :prev_hash]
-
   @doc """
   Calculate hash of block
   """
-  def hash(%Block{} = block) do
+  @spec hash(map(), list(atom())) :: String.t()
+  def hash(block, hash_fields) do
     block
-    |> Map.take(@hash_fields)
+    |> Map.take(hash_fields)
     |> Jason.encode!()
     |> sha256
   end

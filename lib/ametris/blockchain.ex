@@ -4,6 +4,7 @@ defmodule Ametris.Blockchain do
   @doc """
   Initialize a new blockchain with a genesis block
   """
+  @spec new() :: [Block.t()]
   def new do
     [Block.genesis()]
   end
@@ -11,6 +12,7 @@ defmodule Ametris.Blockchain do
   @doc """
   Insert new data into the blockchain
   """
+  @spec insert(list(Block.t()), String.t()) :: list(Block.t())
   def insert(blockchain, data) when is_list(blockchain) do
     %Block{hash: prev_hash} = hd(blockchain)
 
@@ -20,6 +22,7 @@ defmodule Ametris.Blockchain do
   @doc """
   Validate the valid blockchain
   """
+  @spec valid?(list(Block.t())) :: boolean()
   def valid?([%Block{} = block]) do
     Block.valid?(block)
   end
